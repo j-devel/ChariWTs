@@ -178,6 +178,7 @@ module Chariwt
     end
 
     def self.from_pkcs7(token, extracert = nil)
+      puts "@@ chariwt.rb: from_pkcs7(): hello"
       json_txt,unverified_token,store0 = json0_from_pkcs7(token, extracert)
       voucher_from_verified_data(unverified_token.data, store0, unverified_token)
     end
