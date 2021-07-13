@@ -261,6 +261,7 @@ module Chariwt
 
     def self.from_cbor_cose_io(tokenio, pubkey = nil)
       unverified = from_cbor_cose_io_unverified(tokenio)
+      puts "@@ unverified.pubkey: #{unverified.pubkey}"
       pubkey ||= unverified.pubkey
 
       raise MissingPublicKey.new("cose unprotected did include a key") unless pubkey
