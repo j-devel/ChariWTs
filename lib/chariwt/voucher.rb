@@ -242,6 +242,7 @@ module Chariwt
     def self.from_cbor_cose_io_unverified(tokenio)
       # first extract the public key so that it can be used to verify things.
       unverified = Chariwt::CoseSign0.create_io(tokenio)
+      puts "@@ [voucher.rb] unverified: #{unverified}"
 
       unverified.parse
       return unverified
@@ -261,10 +262,14 @@ module Chariwt
 
     def self.from_cbor_cose_io(tokenio, pubkey = nil)
       unverified = from_cbor_cose_io_unverified(tokenio)
-      puts "@@ unverified.pubkey: #{unverified.pubkey}"
+      puts "@@ [voucher.rb] unverified.pubkey: #{unverified.pubkey}"
       pubkey ||= unverified.pubkey
 
       raise MissingPublicKey.new("cose unprotected did include a key") unless pubkey
+
+      puts "@@ [voucher.rb] !!!! SKPPING validation for now; returning `nil` !!!!"
+      return nil  # !!!!
+
       return validate_from_chariwt(unverified, pubkey)
     end
 

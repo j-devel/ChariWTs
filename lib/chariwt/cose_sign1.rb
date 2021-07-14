@@ -49,9 +49,11 @@ module Chariwt
     #
     #
     def parse
+      puts "@@ [cose_sign1.rb] parse(): hi"
       return if @parsed
       return unless @raw_cbor
 
+      puts "@@ [cose_sign1.rb] parse(): @raw_cbor.value.length: #{@raw_cbor.value.length}"
       return unless @raw_cbor.value.length==4
 
       # protected hash
@@ -68,6 +70,7 @@ module Chariwt
       @signed_contents = @raw_cbor.value[2]
       @signature_bytes = @raw_cbor.value[3]
       @parsed = true
+      puts "@@ [cose_sign1.rb] parse(): done"
     end
 
     def empty_bstr
@@ -96,6 +99,8 @@ module Chariwt
     end
 
     def validate(pubkey)
+      puts "@@ [cose_sign1.rb] validate(): hi"
+
       case pubkey
       when String    # key is not decoded yet.
         cert        = OpenSSL::X509::Certificate.new(pubkey)

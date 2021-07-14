@@ -49,6 +49,7 @@ module Chariwt
       else
         raise Chariwt::MalformedCBOR
       end
+      puts "@@ [cose_sign0.rb] klass: #{klass} thing: #{thing}"
 
       return klass.new(thing)
     end
