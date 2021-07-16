@@ -81,13 +81,18 @@ module Chariwt
     end
 
     def extract_signature
+      puts "@@ [cose_sign1.rb] extract_signature(): hi"
+      puts "  @signature_bytes.byte_length: #{@signature_bytes.length}"
       r = ECDSA::Format::IntegerOctetString.decode(@signature_bytes[0..31])
       s = ECDSA::Format::IntegerOctetString.decode(@signature_bytes[32..63])
+      puts "  r: #{r}"
+      puts "  s: #{s}"
       ECDSA::Signature.new(r, s)
     end
 
     def signature
       @signature ||= extract_signature
+      puts "@@ [cose_sign1.rb] signature(): @signature: #{@signature}"
     end
 
     def parse_signed_contents

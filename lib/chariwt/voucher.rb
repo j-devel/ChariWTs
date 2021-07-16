@@ -260,6 +260,13 @@ module Chariwt
       return object
     end
 
+    # @@ !!!!!!!!
+    def self.debug_unverified(unverified)
+      puts "@@ [voucher.rb] debug_unverified(): vvvvvvvv vvvvvvvv"
+      unverified.signature
+      puts "@@ [voucher.rb] debug_unverified(): ^^^^^^^^ ^^^^^^^^"
+    end
+
     def self.from_cbor_cose_io(tokenio, pubkey = nil)
       unverified = from_cbor_cose_io_unverified(tokenio)
       puts "@@ [voucher.rb] unverified.pubkey: #{unverified.pubkey}"
@@ -267,6 +274,7 @@ module Chariwt
 
       raise MissingPublicKey.new("cose unprotected did include a key") unless pubkey
 
+      debug_unverified(unverified)  # @@ !!!!!!!!
       puts "@@ [voucher.rb] !!!! SKPPING validation for now; returning `nil` !!!!"
       return nil  # !!!!
 
