@@ -49,7 +49,7 @@ module Chariwt
     #
     #
     def parse
-      puts "@@ [cose_sign1.rb] parse(): hi"
+      puts "@@ [cose_sign1.rb] parse(): ^^"
       return if @parsed
       return unless @raw_cbor
 
@@ -81,7 +81,7 @@ module Chariwt
     end
 
     def extract_signature
-      puts "@@ [cose_sign1.rb] extract_signature(): hi"
+      puts "@@ [cose_sign1.rb] extract_signature(): ^^"
       puts "  @signature_bytes.byte_length: #{@signature_bytes.length}"
       r = ECDSA::Format::IntegerOctetString.decode(@signature_bytes[0..31])
       s = ECDSA::Format::IntegerOctetString.decode(@signature_bytes[32..63])
@@ -96,15 +96,17 @@ module Chariwt
     end
 
     def parse_signed_contents
+      puts "@@ [cose_sign1.rb] parse_signed_contents(): ^^"
       if @signed_contents.kind_of? String
         CBOR::Unpacker.new(StringIO.new(@signed_contents)).each { |thing|
+          puts "  !! `@contents = thing`, where thing: #{thing}"
           @contents = thing
         }
       end
     end
 
     def validate(pubkey)
-      puts "@@ [cose_sign1.rb] validate(): hi"
+      puts "@@ [cose_sign1.rb] validate(): ^^"
 
       case pubkey
       when String    # key is not decoded yet.

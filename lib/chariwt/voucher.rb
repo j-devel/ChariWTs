@@ -263,7 +263,11 @@ module Chariwt
     # @@ !!!!!!!!
     def self.debug_unverified(unverified)
       puts "@@ [voucher.rb] debug_unverified(): vvvvvvvv vvvvvvvv"
+      #
       unverified.signature
+      #
+      unverified.parse_signed_contents
+      #
       puts "@@ [voucher.rb] debug_unverified(): ^^^^^^^^ ^^^^^^^^"
     end
 
