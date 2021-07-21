@@ -262,13 +262,14 @@ module Chariwt
 
     # @@ !!!!!!!!
     def self.debug_unverified(unverified)
-      puts "@@ [voucher.rb] debug_unverified(): vvvvvvvv vvvvvvvv"
-      #
+      puts "@@ [voucher.rb] debug_unverified(): ^^^^^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^^^^^"
+      puts "  ---- debug `.signature`"
       unverified.signature
-      #
+      puts "  ---- debug `.parse_signed_contents`"
       unverified.parse_signed_contents
-      #
-      puts "@@ [voucher.rb] debug_unverified(): ^^^^^^^^ ^^^^^^^^"
+      puts "  ---- debug `.basic_validation`"
+      puts "  unverified.basic_validation: #{unverified.basic_validation}"
+      puts "@@ [voucher.rb] debug_unverified(): vvvvvvvv vvvvvvvv vvvvvvvv vvvvvvvv"
     end
 
     def self.from_cbor_cose_io(tokenio, pubkey = nil)

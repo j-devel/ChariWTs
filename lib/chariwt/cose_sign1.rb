@@ -29,6 +29,8 @@ module Chariwt
     end
 
     def basic_validation
+      puts "@@ [cose_sign1.rb] basic_validation(): ^^"
+      puts "@@ [cose_sign1.rb] basic_validation(): @protected_bucket: #{@protected_bucket}"
       # verify that it is ECDSA with SHA-256.
       @protected_bucket[Cose::Msg::ALG] == Cose::Msg::ES256
     end
@@ -59,13 +61,17 @@ module Chariwt
       # protected hash
       @protected_bucket = nil
       @encoded_protected_bucket = @raw_cbor.value[0]
+      puts "@@ [cose_sign1.rb] parse(): @encoded_protected_bucket: #{@encoded_protected_bucket}"
       CBOR::Unpacker.new(StringIO.new(@encoded_protected_bucket)).each { |thing|
         @protected_bucket = thing
       }
+      puts "@@ [cose_sign1.rb] parse(): @protected_bucket: #{@protected_bucket}"
+      puts "@@ [cose_sign1.rb] parse(): @protected_bucket.to_cbor: #{@protected_bucket.to_cbor}"
 
       if(@raw_cbor.value[1].class == Hash)
         @unprotected_bucket = @raw_cbor.value[1]
       end
+      puts "@@ [cose_sign1.rb] parse(): @unprotected_bucket: #{@unprotected_bucket}"
 
       @signed_contents = @raw_cbor.value[2]
       @signature_bytes = @raw_cbor.value[3]
