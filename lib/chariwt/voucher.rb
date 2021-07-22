@@ -270,6 +270,8 @@ module Chariwt
       unverified.parse_signed_contents
       puts "  ---- debug `.basic_validation`"
       puts "  unverified.basic_validation: #{unverified.basic_validation}"
+      puts "  ---- debug `.kid`"
+      puts "  unverified.kid: #{unverified.kid ? unverified.kid : '<empty>'}"
       puts "@@ [voucher.rb] debug_unverified(): vvvvvvvv vvvvvvvv vvvvvvvv vvvvvvvv"
     end
 

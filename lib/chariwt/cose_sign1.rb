@@ -36,12 +36,15 @@ module Chariwt
     end
 
     def kid
+      puts "@@ [cose_sign1.rb] kid(): ^^"
       @unprotected_bucket[Cose::Msg::KID]
     end
 
     # the group should be taken from another attribute
     def pubkey(group = ECDSA::Group::Nistp256)
+      puts "@@ [cose_sign1.rb] pubkey(): ^^"
       if @unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY]
+        puts "@@ [cose_sign1.rb] pubkey(): pubkey before decoded: #{@unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY].bytes}"
         @pubkey ||= ECDSA::Format::PointOctetString.decode(@unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY], group)
       end
     end
@@ -128,10 +131,10 @@ module Chariwt
 
       sig_struct = ["Signature1", @encoded_protected_bucket, empty_bstr, @signed_contents]
       @digest     = sig_struct.to_cbor
-      puts "@@ [cose_sign1.rb] validate(): [len=#{@digest.length}] @digest: #{@digest}"
+      puts "@@ [cose_sign1.rb] validate(): [len=#{@digest.bytes.length}] @digest: #{@digest.bytes}"
 
       @sha256 = Digest::SHA256.digest(@digest)
-      puts "@@ [cose_sign1.rb] validate(): sha256: #{sha256}"
+      puts "@@ [cose_sign1.rb] validate(): sha256: #{sha256.bytes}"
       puts "@@ [cose_sign1.rb] validate(): signature: #{signature}"
       @valid = ECDSA.valid_signature?(pubkey_point, sha256, signature)
       puts "@@ [cose_sign1.rb] validate(): @valid: #{@valid} #{@valid ? '✅' : '❌'}"
