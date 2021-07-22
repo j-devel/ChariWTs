@@ -93,6 +93,7 @@ module Chariwt
     end
 
     def self.object_from_verified_cbor(signedobject, pubkey)
+      puts "@@ [voucher.rb] object_from_verified_cbor(): ^^"
       vr = new
       vr.coseSignedPriorVoucherRequest!
       vr.voucherType = voucher_type
@@ -275,13 +276,21 @@ module Chariwt
     def self.from_cbor_cose_io(tokenio, pubkey = nil)
       unverified = from_cbor_cose_io_unverified(tokenio)
       puts "@@ [voucher.rb] unverified.pubkey: #{unverified.pubkey}"
-      pubkey ||= unverified.pubkey
-
-      raise MissingPublicKey.new("cose unprotected did include a key") unless pubkey
 
       debug_unverified(unverified)  # @@ !!!!!!!!
-      puts "@@ [voucher.rb] !!!! SKPPING validation for now; returning `nil` !!!!"
-      return nil  # !!!!
+
+      if true  # @@
+        puts "@@ ⚠️ force using `pubkey` to be found in cose unprotected; ignore the externally provided one!!"
+        pubkey = nil
+      else
+        puts "@@ ⚠️ using `pubkey` externally provided if so (original behavior)"
+      end
+
+      pubkey ||= unverified.pubkey
+      raise MissingPublicKey.new("cose unprotected did include a key") unless pubkey
+
+#       puts "@@ [voucher.rb] !!!! SKPPING validation for now; returning `nil` !!!!"
+#       return nil  # !!!!
 
       return validate_from_chariwt(unverified, pubkey)
     end

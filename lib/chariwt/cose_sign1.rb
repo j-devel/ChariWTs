@@ -76,7 +76,6 @@ module Chariwt
       @signed_contents = @raw_cbor.value[2]
       @signature_bytes = @raw_cbor.value[3]
       @parsed = true
-      puts "@@ [cose_sign1.rb] parse(): done"
     end
 
     def empty_bstr
@@ -98,7 +97,6 @@ module Chariwt
 
     def signature
       @signature ||= extract_signature
-      puts "@@ [cose_sign1.rb] signature(): @signature: #{@signature}"
     end
 
     def parse_signed_contents
@@ -112,7 +110,7 @@ module Chariwt
     end
 
     def validate(pubkey)
-      puts "@@ [cose_sign1.rb] validate(): ^^"
+      puts "@@ [cose_sign1.rb] validate(): pubkey: #{pubkey}"
 
       case pubkey
       when String    # key is not decoded yet.
@@ -126,11 +124,17 @@ module Chariwt
         raise InvalidKeyType
       end
 
+      puts "@@ [cose_sign1.rb] validate(): pubkey -> pubkey_point: #{pubkey_point}"
+
       sig_struct = ["Signature1", @encoded_protected_bucket, empty_bstr, @signed_contents]
       @digest     = sig_struct.to_cbor
+      puts "@@ [cose_sign1.rb] validate(): [len=#{@digest.length}] @digest: #{@digest}"
 
       @sha256 = Digest::SHA256.digest(@digest)
+      puts "@@ [cose_sign1.rb] validate(): sha256: #{sha256}"
+      puts "@@ [cose_sign1.rb] validate(): signature: #{signature}"
       @valid = ECDSA.valid_signature?(pubkey_point, sha256, signature)
+      puts "@@ [cose_sign1.rb] validate(): @valid: #{@valid} #{@valid ? '✅' : '❌'}"
 
       if @valid
         parse_signed_contents
