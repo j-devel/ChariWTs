@@ -44,7 +44,8 @@ module Chariwt
     def pubkey(group = ECDSA::Group::Nistp256)
       puts "@@ [cose_sign1.rb] pubkey(): ^^"
       if @unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY]
-        puts "@@ [cose_sign1.rb] pubkey(): pubkey before decoded: #{@unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY].bytes}"
+        _pk = @unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY]
+        puts "@@ [cose_sign1.rb] pubkey(): [len=#{_pk.bytes.length}] (pubkey before decoded): #{_pk.bytes}"
         @pubkey ||= ECDSA::Format::PointOctetString.decode(@unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY], group)
       end
     end
@@ -90,7 +91,7 @@ module Chariwt
 
     def extract_signature
       puts "@@ [cose_sign1.rb] extract_signature(): ^^"
-      puts "  @signature_bytes.byte_length: #{@signature_bytes.length}"
+      puts "  [len=#{@signature_bytes.bytes.length}] @signature_bytes: #{@signature_bytes.bytes}"
       r = ECDSA::Format::IntegerOctetString.decode(@signature_bytes[0..31])
       s = ECDSA::Format::IntegerOctetString.decode(@signature_bytes[32..63])
       puts "  r: #{r}"
