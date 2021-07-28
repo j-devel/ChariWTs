@@ -118,11 +118,14 @@ module Chariwt
 
       case pubkey
       when String    # key is not decoded yet.
+        puts "@@ [cose_sign1.rb] validate(): `when String` met"
         cert        = OpenSSL::X509::Certificate.new(pubkey)
         pubkey_point= ECDSA::Format::PubKey.decode(cert)
       when OpenSSL::X509::Certificate
+        puts "@@ [cose_sign1.rb] validate(): `when OpenSSL::X509::Certificate` met"
         pubkey_point = ECDSA::Format::PubKey.decode(pubkey)
       when ECDSA::Point
+        puts "@@ [cose_sign1.rb] validate(): `when ECDSA::Point` met"
         pubkey_point = pubkey
       else
         raise InvalidKeyType

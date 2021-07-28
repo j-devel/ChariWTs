@@ -281,15 +281,17 @@ module Chariwt
 
       debug_unverified(unverified)  # @@ !!!!!!!!
 
-      if true  # @@
+#       if true  # @@
+      if false  # @@ (original mode behavior)
         puts "@@ ⚠️ force using `pubkey` to be found in cose unprotected; ignore the externally provided one!!"
         pubkey = nil
       else
-        puts "@@ ⚠️ using `pubkey` externally provided if so (original behavior)"
+        puts "@@ (orig mode) using `pubkey` externally provided if so"
       end
 
       pubkey ||= unverified.pubkey
-      raise MissingPublicKey.new("cose unprotected did include a key") unless pubkey
+#       raise MissingPublicKey.new("cose unprotected did include a key") unless pubkey
+      raise MissingPublicKey.new("@@ !!!!") unless pubkey
 
 #       puts "@@ [voucher.rb] !!!! SKPPING validation for now; returning `nil` !!!!"
 #       return nil  # !!!!
