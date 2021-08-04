@@ -130,6 +130,7 @@ module Chariwt
       else
         raise InvalidKeyType
       end
+      puts "@@ [cose_sign1.rb] validate(): pubkey_point: #{pubkey_point.x.to_s}, #{pubkey_point.y.to_s}"
 
       puts "@@ [cose_sign1.rb] validate(): pubkey -> pubkey_point: #{pubkey_point}"
 
