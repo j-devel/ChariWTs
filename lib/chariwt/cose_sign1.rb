@@ -157,13 +157,18 @@ module Chariwt
     end
 
     def setup_signature_buckets
+      puts "[cose_sign1.rb] setup_signature_buckets(): ^^"
+
       @encoded_protected_bucket = @protected_bucket.to_cbor
       sig_struct = ["Signature1", encoded_protected_bucket, Chariwt::CoseSign.empty_bstr, @content]
       @digested   = sig_struct.to_cbor
       @digest     = Digest::SHA256.digest(digested)
+      puts "[cose_sign1.rb] setup_signature_buckets(): `@digest.bytes`: #{@digest.bytes}"
     end
 
     def concat_signed_buckets(sig_bytes)
+      puts "[cose_sign1.rb] concat_signed_buckets(): ^^"
+
       # protected, unprotected, payload, signature
       sign1 = [ @encoded_protected_bucket, @unprotected_bucket, @content, sig_bytes ]
       @binary = CBOR::Tagged.new(18, sign1).to_cbor
@@ -180,6 +185,8 @@ module Chariwt
     end
 
     def generate_signature(group, private_key, temporary_key = nil)
+      puts "[cose_sign1.rb] generate_signature(): ^^"
+
       @group = group
 
       unless temporary_key
@@ -190,7 +197,11 @@ module Chariwt
 
       #puts "group: #{group} pk: #{private_key}"
       #puts "digest: #{digest.unpack("H*")}"; puts "tk: #{temporary_key}"
+      puts "[cose_sign1.rb] generate_signature(): 🔥🔥🔥 calling `@signature= ECDSA.sign(group, private_key, digest, temporary_key)`"
       @signature= ECDSA.sign(group, private_key, digest, temporary_key)
+      puts "[cose_sign1.rb] generate_signature(): `@signature.r`: #{@signature.r}"
+      puts "[cose_sign1.rb] generate_signature(): `@signature.s`: #{@signature.s}"
+      puts "[cose_sign1.rb] generate_signature(): `@signature_bytes`: #{@signature_bytes}"
 
       concat_signed_buckets(ecdsa_signed_bytes)
     end

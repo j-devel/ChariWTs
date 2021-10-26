@@ -699,16 +699,27 @@ module Chariwt
     end
 
     def cose_sign(privkey, group = ECDSA::Group::Nistp256, temporary_key = nil)
+      puts "[voucher.rb] cose_sign(): ^^"
+
       @sidhash = hash2yangsid(vrhash)
+      puts "[voucher.rb] cose_sign(): `@sidhash`: #{@sidhash}"
+
       sig = Chariwt::CoseSign1.new
+
       sig.content = @sidhash.to_cbor
+      puts "[voucher.rb] cose_sign(): `sig.content.bytes`: #{sig.content.bytes}"
+
+      puts "[voucher.rb] cose_sign(): `pubkey`: #{pubkey}"  # e.g. <empty> for `test_vr_cose`
       if pubkey
         sig.unprotected_bucket[Cose::Msg::VOUCHER_PUBKEY] = pubkey.to_wireformat
       end
 
+      #puts "[voucher.rb] cose_sign(): `privkey`: #{privkey}"  # e.g. #<OpenSSL::PKey::EC:0x000055b0d96de2e8>
       case privkey
       when OpenSSL::PKey::EC
         (privkey,group) = ECDSA::Format::PrivateKey.decode(privkey)
+        #puts "[voucher.rb] cose_sign(): decoded `privkey` (integers): #{privkey}"
+        puts "[voucher.rb] cose_sign(): decoded `group`: #{group}"  # e.g. #<ECDSA::Group:nistp256>
 
       # ECDSA private keys are just integers
       when Integer
