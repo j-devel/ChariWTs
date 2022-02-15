@@ -650,6 +650,10 @@ module Chariwt
     end
 
     def vrhash
+      puts "[voucher.rb] vrhash(): ^^"
+      puts "[voucher.rb] vrhash(): (initially) `@vrhash == nil`: #{@vrhash == nil}"
+      puts "[voucher.rb] vrhash(): object_top_level: #{object_top_level}"  # e.g. ietf-voucher-request:voucher
+      puts "[voucher.rb] vrhash(): inner_attributes: #{inner_attributes}"  # e.g. {"assertion"=>:proximity, "created-on"=>2021-10-26 10:19:00 +0700, "serial-number"=>"00-D0-E5-02-00-2E", "nonce"=>"rHgcBVNVaFmBWbTMmeOKug"}
       @vrhash ||= { object_top_level => inner_attributes }
     end
 

@@ -161,13 +161,17 @@ module Chariwt
 
       @encoded_protected_bucket = @protected_bucket.to_cbor
       sig_struct = ["Signature1", encoded_protected_bucket, Chariwt::CoseSign.empty_bstr, @content]
+      puts "[cose_sign1.rb] setup_signature_buckets(): `encoded_protected_bucket.bytes`: #{encoded_protected_bucket.bytes}"
       @digested   = sig_struct.to_cbor
+      puts "[cose_sign1.rb] setup_signature_buckets(): `@digested.bytes`: #{@digested.bytes}"
       @digest     = Digest::SHA256.digest(digested)
       puts "[cose_sign1.rb] setup_signature_buckets(): `@digest.bytes`: #{@digest.bytes}"
     end
 
     def concat_signed_buckets(sig_bytes)
       puts "[cose_sign1.rb] concat_signed_buckets(): ^^"
+      puts "[cose_sign1.rb] concat_signed_buckets(): sig_bytes: #{sig_bytes.bytes}"
+      puts "[cose_sign1.rb] concat_signed_buckets(): @content: #{@content.bytes}"
 
       # protected, unprotected, payload, signature
       sign1 = [ @encoded_protected_bucket, @unprotected_bucket, @content, sig_bytes ]
@@ -198,6 +202,8 @@ module Chariwt
       #puts "group: #{group} pk: #{private_key}"
       #puts "digest: #{digest.unpack("H*")}"; puts "tk: #{temporary_key}"
       puts "[cose_sign1.rb] generate_signature(): 🔥🔥🔥 calling `@signature= ECDSA.sign(group, private_key, digest, temporary_key)`"
+      puts "[cose_sign1.rb] deteministic; ref -- https://github.com/DavidEGrayson/ruby_ecdsa#ecdsa-gem-for-ruby;\n quote -- \"This gem does not use any randomness; all the algorithms are deterministic. In order to sign a message, you must generate a secure random number k between 0 and the order of the group and pass it as an argument to ECDSA.sign. You should take measures to ensure that you never use the same random number to sign two different messages, or else it would be easy for someone to compute your private key from those two signatures.\""
+      puts "[cose_sign1.rb] ref -- https://github.com/DavidEGrayson/ruby_ecdsa#signing-a-message"
       @signature= ECDSA.sign(group, private_key, digest, temporary_key)
       puts "[cose_sign1.rb] generate_signature(): `@signature.r`: #{@signature.r}"
       puts "[cose_sign1.rb] generate_signature(): `@signature.s`: #{@signature.s}"
